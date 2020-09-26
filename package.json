@@ -1,0 +1,22 @@
+{
+  "name": "hotkeys-manager",
+  "version": "1.0.0",
+  "description": "Keyboard hotkeys manager",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "hotkeys",
+    "shortcuts",
+    "keyboard",
+    "commands",
+    "keydown",
+    "keypress",
+    "manager"
+  ],
+  "homepage": "https://github.com/hjalmar/hotkeys-manager",
+  "type": "module",
+  "author": "Jens Hjalmarsson",
+  "license": "ISC"
+}
