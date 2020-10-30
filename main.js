@@ -121,20 +121,27 @@ export default class HotkeysManager{
 
     return shortcut;
   }
-  execute(command){
+  execute(command, state){
     // loop through command sequence and dispatch the events
     // which will execute the command like one pressed the keyboard
-    const keys = {};
-    command.map(key => keys[key.toLowerCase()] = true);
-    const e = new Event("keydown");
-    e.customExecuteEvent = keys;
-    this.__target.dispatchEvent(e);
-    // release them
-    command.map(key => {
-      const e = new Event("keyup");
-      e.code = key;
+    // handle on state
+    if(state == 'on' || state == undefined){
+      const keys = {};
+      command.map(key => keys[key.toLowerCase()] = true);
+      const e = new Event("keydown");
+      e.customExecuteEvent = keys;
       this.__target.dispatchEvent(e);
-    });
+    }
+
+    // handle off state
+    if(state == 'off' || state == undefined){
+      // release them
+      command.map(key => {
+        const e = new Event("keyup");
+        e.code = key;
+        this.__target.dispatchEvent(e);
+      });
+    }
   }
   subscribe(callback){
     let keys = {};
@@ -167,24 +174,26 @@ export default class HotkeysManager{
         // if the shortcut has on callback, execute that as well
         if(typeof match.callbacks.on == 'function'){
           match.callbacks.on.call(null, { e, Hotkey: match, on: true });
+        }else{
+          // call the callback
+          if(typeof callback == 'function'){
+            callback.call(null, { e, Hotkey: match, on: true });
+          }
         }
 
-        // call the callback
-        if(typeof callback == 'function'){
-          callback.call(null, { e, Hotkey: match, on: true });
-        }
       }
     }
     const keyUpHandler = e => {
       keys[e.code.toLowerCase()] = false; 
       if(prevCommand.instance && typeof prevCommand.instance.callbacks.off == 'function'){
         prevCommand.instance.callbacks.off.call(null, { e, Hotkey: prevCommand.instance, on: false });
+      }else{
+        // call the callback
+        if(prevCommand.instance && typeof callback == 'function'){
+          callback.call(null, { e, Hotkey: prevCommand.instance, on: false });
+        }
       }
 
-      // call the callback
-      if(prevCommand.instance && typeof callback == 'function'){
-        callback.call(null, { e, Hotkey: prevCommand.instance, on: false });
-      }
 
       prevCommand = {};
     };
