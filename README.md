@@ -47,7 +47,7 @@ const open = hotkeys.set(['ControlLeft', 'KeyO'], {
 });
 ```
 
-Adding callbacks for on and off states.
+Adding callbacks for on and off states. Note that defining on or off callbacks will make it so the global general callback wont be executed for that particular state. 
 ```js
 // on
 open.on(({ e, Hotkey, on }) => {
@@ -97,4 +97,23 @@ const unsubscribe = hotkeys.subscribe(({ e, Hotkey, on }) => {
   // along with the current Hotkey Shortcut instance
   console.log(Hotkey);
 });
+```
+
+## Executing keycommands programmatically
+You can execute a command programmarically by calling the execute function. 
+Call the execute function with the same keys that you would use when you set a new command. And 
+a second optional argument of the state you want to execute.
+
+On some odd occasions you might be required to call one or the other. So provide either the string `on` or `off` for the on off states and leave it or provide `undefined` for sequentially calling on then off.
+
+```js
+// hotkeys.execute(keys: Array[, state: String|undefined])
+
+// calling on followed by off
+hotkeys.execute(['KeyE']);
+
+// call only 'on' state
+hotkeys.execute(['KeyE'], 'on');
+// call only 'off' state
+hotkeys.execute(['KeyE'], 'off');
 ```
