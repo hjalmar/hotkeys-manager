@@ -106,8 +106,8 @@ export default class HotkeysManager{
       groups,
       options: { 
         priority: props.priority || 0,
-        once: props.once || this.__options.once, 
-        preventDefault: props.preventDefault || this.__options.preventDefault,
+        once: typeof props.once == 'boolean' ? props.once : this.__options.once, 
+        preventDefault: typeof props.preventDefault == 'boolean' ? props.preventDefault : this.__options.preventDefault,
       }
     });
 
